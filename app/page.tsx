@@ -1,58 +1,70 @@
 import Link from "next/link";
-import { Phrase } from "./components/Notation";
+import { getDataset } from "@/lib/ragas";
 
-const YAMAN_AROHA = ["NI_MANDRA", "RE", "GA", "MA_TIVRA", "DHA", "NI", "SA_TAR"];
-
-export default function Home() {
+export default async function Home() {
+  const { ragas, talas, recordings } = await getDataset();
   return (
-    <>
-      <section className="hero">
-        <div className="wrap">
-          <div className="hero-notation">
-            <Phrase tokens={YAMAN_AROHA} />
-            <p className="hero-caption">raga Yaman — ascent, from mandra Ni to tar Sa</p>
-          </div>
-          <h1>Hindustani ragas as open data</h1>
-          <p className="lede">
-            OpenRaga is an open format and a community-curated dataset for
-            describing ragas: scale movements, prominent notes, performance
-            time and character — machine-readable, versioned, freely licensed.
-          </p>
-          <div className="hero-actions">
-            <Link href="/ragas" className="button">
-              Browse the ragas
-            </Link>
-            <a href="https://github.com/OpenRaga/ragajson">Read the format</a>
-          </div>
-        </div>
+    <div className="wrap">
+      <section className="intro">
+        <h1>Hindustani music as open data</h1>
       </section>
-      <section className="home-section">
-        <div className="wrap home-grid">
-          <div>
-            <h2>A format</h2>
-            <p>
-              RagaJSON is a JSON Schema for describing a raga at the symbolic
-              level: sargam notes with octave, ascent and descent, pakad
-              phrases, vadi and samvadi, time of day and rasa.
-            </p>
-          </div>
-          <div>
-            <h2>A dataset</h2>
-            <p>
-              Ragamala Data is a digital ragamala — one document per raga,
-              validated in CI, built from traditional, widely attested sources
-              and licensed CC BY 4.0.
-            </p>
-          </div>
-          <div>
-            <h2>A community</h2>
-            <p>
-              Every raga page traces back to a reviewed pull request. Git is
-              the database; contributions are open to musicians and scholars.
-            </p>
-          </div>
-        </div>
+
+      <section className="home-block">
+        <h2>The format</h2>
+        <p>
+          RagaJSON is a family of JSON Schemas that describe ragas, talas and
+          exemplary recordings in machine-readable form.
+        </p>
+        <p className="home-link">
+          <a href="https://github.com/OpenRaga/ragajson">
+            Read the format on GitHub
+          </a>
+        </p>
       </section>
-    </>
+
+      <section className="home-block">
+        <h2>The database</h2>
+        <p>
+          Ragamala Data uses the format to build a community-curated database:
+          one document per raga, tala and recording, every change reviewed and
+          validated in CI. Git is the database.
+        </p>
+        <p className="home-link">
+          <a href="https://github.com/OpenRaga/ragamala-data">
+            Browse the data on GitHub
+          </a>
+        </p>
+      </section>
+
+      <section className="home-block">
+        <h2>The catalog</h2>
+        <ul className="catalog-links">
+          <li>
+            <Link href="/ragas">{ragas.length} ragas</Link>
+          </li>
+          <li>
+            <Link href="/talas">{talas.length} talas</Link>
+          </li>
+          <li>
+            <span>
+              {recordings.length} recordings — linked from raga and tala pages
+            </span>
+          </li>
+        </ul>
+      </section>
+
+      <section className="home-block">
+        <h2>Contribute</h2>
+        <p>
+          Add a raga, a tala or a recording through a pull request. The
+          contribution guide covers sourcing rules, licensing and validation.
+        </p>
+        <p className="home-link">
+          <a href="https://github.com/OpenRaga/ragamala-data/blob/main/CONTRIBUTING.md">
+            Read the contribution guide
+          </a>
+        </p>
+      </section>
+    </div>
   );
 }

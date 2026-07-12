@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Analytics } from "@vercel/analytics/next";
+import { SiteAnalytics } from "./components/SiteAnalytics";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -47,7 +47,7 @@ export default function RootLayout({
             </p>
           </div>
         </footer>
-        <Analytics />
+        <SiteAnalytics />
       </body>
     </html>
   );

@@ -1,0 +1,342 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/OpenRaga/ragajson/main/schema/raga.schema.json",
+  "title": "RagaJSON Schema",
+  "description": "Machine-readable schema for describing ragas of Indian classical music.",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Raga name."
+    },
+    "name_devanagari": {
+      "type": "string",
+      "pattern": "^[\\u0900-\\u097F][\\u0900-\\u097F ]*$",
+      "description": "Raga name in Devanagari script."
+    },
+    "aliases": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true,
+      "minItems": 1,
+      "description": "Alternate names and spellings of the raga (e.g. Bhup, Bhup kalyan for Bhupali)."
+    },
+    "system": {
+      "const": "Hindustani",
+      "description": "Indian classical music system (Hindustani)."
+    },
+    "thaat": {
+      "type": "string",
+      "enum": ["Bilawal", "Kalyan", "Khamaj", "Bhairav", "Purvi", "Marwa", "Kafi", "Asavari", "Bhairavi", "Todi"],
+      "description": "Parent thaat (parent scale) of the raga per the Bhatkhande system."
+    },
+    "classification": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/classification_enum"
+      },
+      "uniqueItems": true,
+      "description": "Raga classifications. A raga may belong to several categories at once."
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Free-form prose: history, character, note treatment, ornamentation, performance conventions — details not expressible in structured fields."
+    },
+    "similar_ragas": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true,
+      "minItems": 1,
+      "description": "Names of ragas easily confused with this one; the distinctions belong in description."
+    },
+    "structure": {
+      "type": "object",
+      "description": "Structural parameters of the raga (notes, patterns, etc.).",
+      "properties": {
+        "aroha": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/note_enum"
+          },
+          "description": "Ascending sequence of notes (with saptak/octave)"
+        },
+        "avaroha": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/note_enum"
+          },
+          "description": "Descending sequence of notes (with saptak/octave)"
+        },
+        "vadi": {
+          "$ref": "#/$defs/sargam_enum",
+          "description": "Vadi — principal (most prominent) note of the raga (pitch class, octave-independent)"
+        },
+        "samvadi": {
+          "$ref": "#/$defs/sargam_enum",
+          "description": "Samvadi — second most prominent note of the raga (pitch class, octave-independent)"
+        },
+        "pakad": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/phrase"
+          },
+          "minItems": 1,
+          "description": "Pakad — characteristic melodic phrases of the raga"
+        }
+      },
+      "additionalProperties": false
+    },
+    "performance": {
+      "type": "object",
+      "description": "Performance-related information (time, season, rasa, etc.).",
+      "properties": {
+        "time_of_day": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/time_of_day_enum"
+          },
+          "uniqueItems": true,
+          "description": "Traditional time of day (Samay Chakra) for raga performance. Array of strings."
+        },
+        "season": {
+          "$ref": "#/$defs/season_enum",
+          "description": "Traditional season for raga performance."
+        },
+        "rasa": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/rasa_enum"
+          },
+          "uniqueItems": true,
+          "description": "List of emotional associations (rasa) for the raga"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "required": ["name", "system"],
+  "additionalProperties": false,
+  "$defs": {
+    "time_of_day_enum": {
+      "title": "TimeOfDayEnum",
+      "description": "Time of day classifications for raga performance. Based on traditional Ashta Prahar system with modern equivalents.",
+      "type": "string",
+      "oneOf": [
+        {
+          "const": "Pratah",
+          "displayName": "Dawn",
+          "description": "Pratah kaal - dawn period, approximately 4-7 AM"
+        },
+        {
+          "const": "Purvaahn",
+          "displayName": "Morning",
+          "description": "Purvaahn - morning period, approximately 7-10 AM"
+        },
+        {
+          "const": "Madhyaahn",
+          "displayName": "Late Morning",
+          "description": "Madhyaahn - late morning/midday, approximately 10 AM-1 PM"
+        },
+        {
+          "const": "Aparaahn",
+          "displayName": "Afternoon",
+          "description": "Aparaahn - afternoon period, approximately 1-4 PM"
+        },
+        {
+          "const": "Sandhya",
+          "displayName": "Evening",
+          "description": "Sandhya kaal - evening twilight, approximately 4-7 PM"
+        },
+        {
+          "const": "Pradosh",
+          "displayName": "Early Night",
+          "description": "Pradosh kaal - early night, approximately 7-10 PM"
+        },
+        {
+          "const": "Nisha",
+          "displayName": "Mid Night",
+          "description": "Nisha kaal - deep night, approximately 10 PM-1 AM"
+        },
+        {
+          "const": "Ardha-ratri",
+          "displayName": "Late Night",
+          "description": "Ardha-ratri - late night/early dawn, approximately 1-4 AM"
+        },
+        {
+          "const": "Unrestricted",
+          "displayName": "Unrestricted",
+          "description": "No specific time restriction - suitable for any time of day"
+        }
+      ],
+      "examples": ["Pratah", "Sandhya", "Unrestricted"]
+    },
+    "season_enum": {
+      "title": "SeasonEnum",
+      "description": "Reference list for indicating the season or time of year traditionally associated with raga performance.",
+      "type": "string",
+      "oneOf": [
+        { "const": "Vasant", "displayName": "Spring", "description": "Spring season" },
+        { "const": "Varsha", "displayName": "Monsoon", "description": "Monsoon or rainy season" },
+        { "const": "Sharad", "displayName": "Autumn", "description": "Autumn season" },
+        { "const": "Hemant", "displayName": "Pre-winter", "description": "Pre-winter or late autumn season" },
+        { "const": "Shishir", "displayName": "Winter", "description": "Winter season" },
+        { "const": "Grishma", "displayName": "Summer", "description": "Summer season" },
+        { "const": "No Specific Season", "displayName": "Any Season", "description": "No specific season restriction; can be performed anytime" }
+      ],
+      "examples": ["Vasant", "Varsha", "No Specific Season"]
+    },
+    "sargam_enum": {
+      "title": "SargamEnum",
+      "description": "Hindustani sargam pitch classes (octave-less) in Bhatkhande notation, used where the octave is not meaningful (vadi, samvadi); melodic sequences use note_enum instead. Machine‑friendly const values use ASCII UPPER_SNAKE; suffix _KOMAL denotes komal (flat) notes and _TIVRA denotes tivra (sharp). displayName follows Bhatkhande convention: uppercase = shuddha, lowercase = komal, 'Má' = tivra.",
+      "type": "string",
+      "oneOf": [
+        {
+          "const": "SA",
+          "displayName": "Sa"
+        },
+        {
+          "const": "RE_KOMAL",
+          "displayName": "re"
+        },
+        {
+          "const": "RE",
+          "displayName": "Re"
+        },
+        {
+          "const": "GA_KOMAL",
+          "displayName": "ga"
+        },
+        {
+          "const": "GA",
+          "displayName": "Ga"
+        },
+        {
+          "const": "MA",
+          "displayName": "Ma"
+        },
+        {
+          "const": "MA_TIVRA",
+          "displayName": "Má"
+        },
+        {
+          "const": "PA",
+          "displayName": "Pa"
+        },
+        {
+          "const": "DHA_KOMAL",
+          "displayName": "dha"
+        },
+        {
+          "const": "DHA",
+          "displayName": "Dha"
+        },
+        {
+          "const": "NI_KOMAL",
+          "displayName": "ni"
+        },
+        {
+          "const": "NI",
+          "displayName": "Ni"
+        }
+      ],
+      "examples": ["SA", "RE_KOMAL", "MA_TIVRA"],
+      "tags": ["hindustani", "bhatkhande"]
+    },
+    "note_enum": {
+      "title": "NoteEnum",
+      "description": "Hindustani sargam note with saptak (octave) for melodic sequences. Token morphology: SWARA[_KOMAL|_TIVRA][_MANDRA|_TAR]; the unmarked octave is madhya. displayName uses the prime sign ′ (U+2032): prefix = mandra, suffix = tar; Má = tivra Ma. Long vowels are not doubled in transliteration (TAR, not TAAR).",
+      "type": "string",
+      "oneOf": [
+        { "const": "SA_MANDRA", "displayName": "′Sa" },
+        { "const": "RE_KOMAL_MANDRA", "displayName": "′re" },
+        { "const": "RE_MANDRA", "displayName": "′Re" },
+        { "const": "GA_KOMAL_MANDRA", "displayName": "′ga" },
+        { "const": "GA_MANDRA", "displayName": "′Ga" },
+        { "const": "MA_MANDRA", "displayName": "′Ma" },
+        { "const": "MA_TIVRA_MANDRA", "displayName": "′Má" },
+        { "const": "PA_MANDRA", "displayName": "′Pa" },
+        { "const": "DHA_KOMAL_MANDRA", "displayName": "′dha" },
+        { "const": "DHA_MANDRA", "displayName": "′Dha" },
+        { "const": "NI_KOMAL_MANDRA", "displayName": "′ni" },
+        { "const": "NI_MANDRA", "displayName": "′Ni" },
+        { "const": "SA", "displayName": "Sa" },
+        { "const": "RE_KOMAL", "displayName": "re" },
+        { "const": "RE", "displayName": "Re" },
+        { "const": "GA_KOMAL", "displayName": "ga" },
+        { "const": "GA", "displayName": "Ga" },
+        { "const": "MA", "displayName": "Ma" },
+        { "const": "MA_TIVRA", "displayName": "Má" },
+        { "const": "PA", "displayName": "Pa" },
+        { "const": "DHA_KOMAL", "displayName": "dha" },
+        { "const": "DHA", "displayName": "Dha" },
+        { "const": "NI_KOMAL", "displayName": "ni" },
+        { "const": "NI", "displayName": "Ni" },
+        { "const": "SA_TAR", "displayName": "Sa′" },
+        { "const": "RE_KOMAL_TAR", "displayName": "re′" },
+        { "const": "RE_TAR", "displayName": "Re′" },
+        { "const": "GA_KOMAL_TAR", "displayName": "ga′" },
+        { "const": "GA_TAR", "displayName": "Ga′" },
+        { "const": "MA_TAR", "displayName": "Ma′" },
+        { "const": "MA_TIVRA_TAR", "displayName": "Má′" },
+        { "const": "PA_TAR", "displayName": "Pa′" },
+        { "const": "DHA_KOMAL_TAR", "displayName": "dha′" },
+        { "const": "DHA_TAR", "displayName": "Dha′" },
+        { "const": "NI_KOMAL_TAR", "displayName": "ni′" },
+        { "const": "NI_TAR", "displayName": "Ni′" }
+      ],
+      "examples": ["SA", "NI_KOMAL_MANDRA", "SA_TAR"],
+      "tags": ["hindustani", "bhatkhande"]
+    },
+    "phrase": {
+      "title": "Phrase",
+      "description": "Melodic phrase: an ordered, non-empty sequence of sargam notes with saptak (octave).",
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/note_enum"
+      },
+      "minItems": 1
+    },
+    "rasa_enum": {
+      "title": "RasaEnum",
+      "description": "Emotional associations (rasa) for raga: shringara, karuna, vira, etc.",
+      "type": "string",
+      "oneOf": [
+        { "const": "Shringara", "displayName": "Romantic", "description": "Romance, love, and beauty" },
+        { "const": "Karuna", "displayName": "Compassionate", "description": "Compassion, grief, and pity" },
+        { "const": "Vira", "displayName": "Heroic", "description": "Heroism, courage, and bravery" },
+        { "const": "Shanta", "displayName": "Peaceful", "description": "Peace, tranquility, and calmness" },
+        { "const": "Bhakti", "displayName": "Devotional", "description": "Devotion and spiritual love" },
+        { "const": "Hasya", "displayName": "Joyful", "description": "Joy, mirth, and humor" },
+        { "const": "Adbhuta", "displayName": "Wondrous", "description": "Wonder, amazement, and mystery" },
+        { "const": "Raudra", "displayName": "Furious", "description": "Anger, fury, and wrath" },
+        { "const": "Bibhatsa", "displayName": "Disgusting", "description": "Disgust and aversion" },
+        { "const": "Bhayanaka", "displayName": "Terrifying", "description": "Fear, terror, and horror" }
+      ],
+      "examples": ["Shringara", "Karuna"]
+    },
+    "classification_enum": {
+      "title": "ClassificationEnum",
+      "description": "Hindustani-specific raga classifications: traditional categories of character, origin, and melodic movement. Note-count classes are covered separately by JatiEnum.",
+      "type": "string",
+      "oneOf": [
+        { "const": "Upanga", "displayName": "Upanga", "description": "A raga that uses only the notes of its parent thaat or retains its pure distinct character" },
+        { "const": "Bhashanga", "displayName": "Bhashanga", "description": "A raga that borrows a foreign note (vivadi) to enhance its beauty" },
+        { "const": "Vakra", "displayName": "Vakra", "description": "A raga with a crooked or zig-zag ascending/descending scale" },
+        { "const": "Naya", "displayName": "Naya", "description": "A modern or recently created raga" },
+        { "const": "Desya", "displayName": "Desya", "description": "A raga of regional or folk origin" },
+        { "const": "Ghana", "displayName": "Ghana", "description": "A heavy or profound raga, often performed with elaborate ornamentation in vilambit (slow) tempo" },
+        { "const": "Rakti", "displayName": "Rakti", "description": "A highly melodic raga known primarily for its strong emotional appeal and pleasing nature" },
+        { "const": "Thaat", "displayName": "Thaat", "description": "A principal raga that gives its name to one of the parent scales (thaats)" }
+      ],
+      "examples": ["Upanga", "Thaat", "Vakra"],
+      "tags": ["hindustani"]
+    }
+  }
+}

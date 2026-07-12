@@ -87,7 +87,9 @@ async function loadRagas(): Promise<RagaEntry[]> {
   const tar = gunzipSync(Buffer.from(await res.arrayBuffer()));
   const entries: RagaEntry[] = [];
   for (const { name, body } of tarEntries(tar)) {
-    const match = name.match(/\/data\/([^/]+)\.json$/);
+    // Accepts both the legacy flat layout (data/<slug>.json) and the typed
+    // layout (data/ragas/<slug>.json) during the dataset migration.
+    const match = name.match(/\/data\/(?:ragas\/)?([^/]+)\.json$/);
     if (!match) continue;
     entries.push({
       slug: match[1],

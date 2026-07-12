@@ -1,26 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Spectral, Noto_Serif_Devanagari, IBM_Plex_Sans } from "next/font/google";
 import "./globals.css";
-
-const spectral = Spectral({
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
-  style: ["normal", "italic"],
-  variable: "--font-serif"
-});
-
-const devanagari = Noto_Serif_Devanagari({
-  subsets: ["devanagari"],
-  weight: ["400", "600"],
-  variable: "--font-deva"
-});
-
-const plexSans = IBM_Plex_Sans({
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
-  variable: "--font-ui"
-});
 
 export const metadata: Metadata = {
   title: {
@@ -36,9 +16,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body
-        className={`${spectral.variable} ${devanagari.variable} ${plexSans.variable}`}
-      >
+      <body>
         <header className="site-header">
           <div className="wrap header-row">
             <Link href="/" className="wordmark">

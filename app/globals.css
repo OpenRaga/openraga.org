@@ -7,9 +7,16 @@
   --madder: #9e2b25;
   --line: #e4e1da;
   --chip: #efede7;
-  --font-body: var(--font-serif), Georgia, serif;
-  --font-heading: var(--font-serif), Georgia, serif;
-  --font-label: var(--font-ui), system-ui, sans-serif;
+  /* System font stacks (systemfontstack.com) — no webfonts, instant render */
+  --font-serif: "Iowan Old Style", "Apple Garamond", Baskerville,
+    "Times New Roman", "Droid Serif", Times, "Source Serif Pro", serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  --font-sans: -apple-system, BlinkMacSystemFont, "Avenir Next", Avenir,
+    "Segoe UI", "Helvetica Neue", Helvetica, Cantarell, Ubuntu, Roboto, Noto,
+    Arial, sans-serif;
+  --font-body: var(--font-serif);
+  --font-heading: var(--font-serif);
+  --font-label: var(--font-sans);
 }
 
 * {
@@ -247,7 +254,7 @@ a:hover {
 }
 
 .deva {
-  font-family: var(--font-deva), serif;
+  font-family: var(--font-serif);
   color: var(--muted);
 }
 
@@ -280,7 +287,7 @@ a:hover {
 }
 
 .raga-header .deva-large {
-  font-family: var(--font-deva), serif;
+  font-family: var(--font-serif);
   font-size: 1.4rem;
   color: var(--muted);
   display: block;

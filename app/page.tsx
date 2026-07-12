@@ -16,9 +16,7 @@ export default async function Home() {
           exemplary recordings in machine-readable form.
         </p>
         <p className="home-link">
-          <a href="https://github.com/OpenRaga/ragajson">
-            Read the format on GitHub
-          </a>
+          <Link href="/schema">Explore the schemas</Link>
         </p>
       </section>
 

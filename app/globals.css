@@ -373,6 +373,81 @@ a:hover {
   font-size: 1rem;
 }
 
+/* Talas */
+
+.tala-formula {
+  font-family: var(--font-label);
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.theka {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.2rem 2rem;
+}
+
+.vibhag-marker {
+  font-family: var(--font-label);
+  font-size: 0.8rem;
+  color: var(--madder);
+  margin-bottom: 0.15rem;
+}
+
+.vibhag-bols {
+  display: flex;
+  gap: 0.9em;
+}
+
+.raga-main .vibhag-bols.notation {
+  font-size: 1.2rem;
+}
+
+/* Recordings */
+
+.recordings {
+  list-style: none;
+  display: grid;
+  gap: 1rem;
+}
+
+.recording {
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: #fffefb;
+  padding: 0.9rem 1.1rem 1rem;
+}
+
+.recording-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 1.05rem;
+  margin-bottom: 0.5rem;
+}
+
+.recording-year {
+  font-family: var(--font-label);
+  font-weight: 400;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.recording-notes {
+  font-size: 0.95rem;
+  color: var(--muted);
+  margin-top: 0.6rem;
+  max-width: 58ch;
+}
+
+a.chip-link:hover {
+  text-decoration: none;
+  border-color: var(--indigo);
+}
+
 /* Footer */
 
 .site-footer {

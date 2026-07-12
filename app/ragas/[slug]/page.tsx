@@ -1,9 +1,21 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getRaga, getRagas, slugify } from "@/lib/ragas";
+import {
+  getRaga,
+  getRagas,
+  getRecordings,
+  getTalas,
+  namesOf,
+  slugify
+} from "@/lib/ragas";
 import { displayNote } from "@/lib/notation";
 import { NotationRow, Phrase } from "../../components/Notation";
+import {
+  matchingSegments,
+  RecordingCard,
+  talaSlugSet
+} from "../../components/Recordings";
 
 export async function generateStaticParams() {
   const ragas = await getRagas();
@@ -19,8 +31,8 @@ export async function generateMetadata({
   const entry = await getRaga(slug);
   if (!entry) return {};
   return {
-    title: `Raga ${entry.raga.name}`,
-    description: entry.raga.description?.split(". ")[0]
+    title: `Raga ${entry.doc.name}`,
+    description: entry.doc.description?.split(". ")[0]
   };
 }
 
@@ -41,9 +53,15 @@ export default async function RagaPage({
   const { slug } = await params;
   const entry = await getRaga(slug);
   if (!entry) notFound();
-  const { raga } = entry;
+  const raga = entry.doc;
   const allRagas = await getRagas();
   const knownSlugs = new Set(allRagas.map((r) => r.slug));
+
+  const names = new Set(namesOf(raga));
+  const performances = matchingSegments(await getRecordings(), (segment) =>
+    segment.raga ? names.has(segment.raga.toLowerCase()) : false
+  );
+  const talaSlugs = talaSlugSet(await getTalas());
 
   return (
     <div className="wrap">
@@ -106,6 +124,21 @@ export default async function RagaPage({
                     </li>
                   );
                 })}
+              </ul>
+            </section>
+          )}
+          {performances.length > 0 && (
+            <section>
+              <h2>Recordings</h2>
+              <ul className="recordings">
+                {performances.map(({ recording, segment }, i) => (
+                  <RecordingCard
+                    key={i}
+                    recording={recording}
+                    segment={segment}
+                    talaSlugs={talaSlugs}
+                  />
+                ))}
               </ul>
             </section>
           )}

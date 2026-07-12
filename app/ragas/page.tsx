@@ -19,7 +19,7 @@ export default async function RagasPage() {
         Every entry is a reviewed, schema-validated document.
       </p>
       <ul className="cards">
-        {ragas.map(({ slug, raga }) => (
+        {ragas.map(({ slug, doc: raga }) => (
           <li className="card" key={slug}>
             <Link href={`/ragas/${slug}`}>
               <div className="card-name-row">

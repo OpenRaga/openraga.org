@@ -25,14 +25,49 @@ export interface Raga {
   performance?: RagaPerformance;
 }
 
-export interface RagaEntry {
+export interface Tala {
+  name: string;
+  name_devanagari?: string;
+  aliases?: string[];
+  system: string;
+  vibhags: number[];
+  clap_pattern: string[];
+  theka: string[];
+  description?: string;
+}
+
+export interface RecordingSegment {
+  raga?: string;
+  talas?: string[];
+  form?: string;
+  instrument?: string;
+  start?: number;
+  notes?: string;
+}
+
+export interface Recording {
+  source: string;
+  artist: string;
+  year?: number;
+  notes?: string;
+  segments: RecordingSegment[];
+}
+
+export interface Entry<T> {
   slug: string;
-  raga: Raga;
+  doc: T;
+}
+
+export interface Dataset {
+  ragas: Entry<Raga>[];
+  talas: Entry<Tala>[];
+  recordings: Entry<Recording>[];
 }
 
 // The dataset is fetched as a single tarball snapshot of the main branch.
 // This avoids api.github.com entirely: codeload has no rate limits, needs no
-// auth, and one request fetches every raga — build-friendly on shared CI IPs.
+// auth, and one request fetches every collection — build-friendly on shared
+// CI IPs.
 const DATA_TARBALL =
   "https://codeload.github.com/OpenRaga/ragamala-data/tar.gz/refs/heads/main";
 
@@ -81,37 +116,67 @@ function* tarEntries(tar: Buffer): Generator<{ name: string; body: Buffer }> {
   }
 }
 
-async function loadRagas(): Promise<RagaEntry[]> {
-  const res = await fetchWithRetry(DATA_TARBALL, { cache: "force-cache" });
+async function loadDataset(): Promise<Dataset> {
+  // Deliberately NOT cache: "force-cache" — Next persists the fetch data
+  // cache across builds (locally and on Vercel), which would freeze the
+  // dataset at the first build and defeat the deploy hook. Next 15 fetches
+  // are uncached by default while pages remain statically generated; the
+  // in-process memoization below keeps it to one download per build worker.
+  const res = await fetchWithRetry(DATA_TARBALL);
   const { gunzipSync } = await import("node:zlib");
   const tar = gunzipSync(Buffer.from(await res.arrayBuffer()));
-  const entries: RagaEntry[] = [];
+  const dataset: Dataset = { ragas: [], talas: [], recordings: [] };
   for (const { name, body } of tarEntries(tar)) {
     // Accepts both the legacy flat layout (data/<slug>.json) and the typed
-    // layout (data/ragas/<slug>.json) during the dataset migration.
-    const match = name.match(/\/data\/(?:ragas\/)?([^/]+)\.json$/);
+    // layout (data/<collection>/<slug>.json).
+    const match = name.match(
+      /\/data\/(?:(ragas|talas|recordings)\/)?([^/]+)\.json$/
+    );
     if (!match) continue;
-    entries.push({
-      slug: match[1],
-      raga: JSON.parse(body.toString("utf8")) as Raga
+    const collection = (match[1] ?? "ragas") as keyof Dataset;
+    dataset[collection].push({
+      slug: match[2],
+      doc: JSON.parse(body.toString("utf8"))
     });
   }
-  if (entries.length === 0) {
+  if (dataset.ragas.length === 0) {
     throw new Error("No raga documents found in the ragamala-data tarball");
   }
-  return entries.sort((a, b) => a.raga.name.localeCompare(b.raga.name));
+  dataset.ragas.sort((a, b) => a.doc.name.localeCompare(b.doc.name));
+  dataset.talas.sort((a, b) => a.doc.name.localeCompare(b.doc.name));
+  return dataset;
 }
 
 // One tarball download per build: memoized so that every statically
 // generated page reuses the same snapshot.
-let ragasPromise: Promise<RagaEntry[]> | undefined;
+let datasetPromise: Promise<Dataset> | undefined;
 
-export function getRagas(): Promise<RagaEntry[]> {
-  ragasPromise ??= loadRagas();
-  return ragasPromise;
+export function getDataset(): Promise<Dataset> {
+  datasetPromise ??= loadDataset();
+  return datasetPromise;
 }
 
-export async function getRaga(slug: string): Promise<RagaEntry | undefined> {
-  const ragas = await getRagas();
-  return ragas.find((entry) => entry.slug === slug);
+export async function getRagas(): Promise<Entry<Raga>[]> {
+  return (await getDataset()).ragas;
+}
+
+export async function getRaga(slug: string): Promise<Entry<Raga> | undefined> {
+  return (await getRagas()).find((entry) => entry.slug === slug);
+}
+
+export async function getTalas(): Promise<Entry<Tala>[]> {
+  return (await getDataset()).talas;
+}
+
+export async function getTala(slug: string): Promise<Entry<Tala> | undefined> {
+  return (await getTalas()).find((entry) => entry.slug === slug);
+}
+
+export async function getRecordings(): Promise<Entry<Recording>[]> {
+  return (await getDataset()).recordings;
+}
+
+// All names (canonical + aliases, lowercased) by which a document is known.
+export function namesOf(doc: { name: string; aliases?: string[] }): string[] {
+  return [doc.name, ...(doc.aliases ?? [])].map((name) => name.toLowerCase());
 }

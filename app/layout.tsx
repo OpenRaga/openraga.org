@@ -47,7 +47,7 @@ export default function RootLayout({
             </p>
           </div>
         </footer>
-        <SiteAnalytics />
+        {process.env.VERCEL_ENV === "production" && <SiteAnalytics />}
       </body>
     </html>
   );

@@ -5,11 +5,11 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: {
-    default: "OpenRaga — Hindustani ragas as open data",
+    default: "OpenRaga — Hindustani music as open data",
     template: "%s · OpenRaga"
   },
   description:
-    "An open format and community-curated dataset for describing Hindustani ragas: machine-readable scale movements, prominent notes, performance time and character."
+    "An open format and community-curated database of Hindustani music: ragas, talas and exemplary recordings, machine-readable and freely licensed."
 };
 
 export default function RootLayout({

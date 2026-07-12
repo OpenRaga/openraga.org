@@ -71,7 +71,8 @@ export default function SchemaPage() {
         return (
           <section className="home-block" key={label}>
             <h2>
-              {label} schema · v{versionOf(doc.$id)}
+              {label} schema
+              <span className="version">v{versionOf(doc.$id)}</span>
             </h2>
             <p>{doc.description}</p>
             <p className="home-link">

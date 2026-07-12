@@ -110,12 +110,17 @@ a:hover {
 }
 
 .home-block h2 {
-  font-family: var(--font-label);
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 1.5rem;
+  margin-bottom: 0.7rem;
+}
+
+.home-block .version {
+  font-weight: 400;
+  font-size: 1.05rem;
   color: var(--muted);
-  margin-bottom: 0.8rem;
+  margin-left: 0.5rem;
 }
 
 .home-block p {
@@ -150,9 +155,9 @@ a:hover {
 
 .dict h3 {
   font-family: var(--font-label);
-  font-weight: 500;
-  font-size: 0.9rem;
-  margin-bottom: 0.3rem;
+  font-weight: 600;
+  font-size: 1rem;
+  margin-bottom: 0.35rem;
 }
 
 .dict code {

@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
 import ragaSchema from "@/public/schema/raga/0.2/raga.schema.json";
 import talaSchema from "@/public/schema/tala/0.1/tala.schema.json";
-import recordingSchema from "@/public/schema/recording/0.1/recording.schema.json";
 
 export const metadata: Metadata = {
   title: "Schemas",
   description:
-    "The RagaJSON schema family: machine-readable formats for ragas, talas and recordings, with their dictionaries of allowed values."
+    "The RagaJSON schema family: machine-readable formats for ragas and talas, with their dictionaries of allowed values."
 };
 
 interface EnumItem {
@@ -38,11 +37,6 @@ const schemas: { label: string; file: string; doc: SchemaDoc }[] = [
     label: "Tala",
     file: "tala.schema.json",
     doc: talaSchema as unknown as SchemaDoc
-  },
-  {
-    label: "Recording",
-    file: "recording.schema.json",
-    doc: recordingSchema as unknown as SchemaDoc
   }
 ];
 
@@ -70,6 +64,7 @@ export default function SchemaPage() {
         );
         return (
           <section className="home-block" key={label}>
+            <p className="eyebrow">RagaJSON</p>
             <h2>
               {label} schema
               <span className="version">v{versionOf(doc.$id)}</span>
@@ -114,10 +109,11 @@ export default function SchemaPage() {
       })}
 
       <section className="home-block">
+        <p className="eyebrow">Roadmap</p>
         <h2>The schemas evolve</h2>
         <p>
-          All three schemas are alpha: fields and dictionaries grow as the
-          dataset does, guided by two principles — new fields need attestation
+          The schemas are alpha: fields and dictionaries grow as the dataset
+          does, guided by two principles — new fields need attestation
           in multiple independent sources, and anything derivable is not
           stored. Missing a form, an instrument, a bol? Propose it.
         </p>

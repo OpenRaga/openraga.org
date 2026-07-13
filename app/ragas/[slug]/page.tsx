@@ -193,7 +193,7 @@ export default async function RagaPage({
           <dt>Source</dt>
           <dd>
             <a
-              href={`https://github.com/OpenRaga/ragamala-data/blob/main/data/${slug}.json`}
+              href={`https://github.com/OpenRaga/ragamala-data/blob/main/data/ragas/${slug}.json`}
             >
               {slug}.json
             </a>

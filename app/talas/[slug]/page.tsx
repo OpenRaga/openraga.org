@@ -102,12 +102,12 @@ export default async function TalaPage({
           <dd>{matras}</dd>
           <dt>Vibhags</dt>
           <dd>{tala.vibhags.join(" + ")}</dd>
-          <dt>Source</dt>
+          <dt>Contribute</dt>
           <dd>
             <a
               href={`https://github.com/OpenRaga/ragamala-data/blob/main/data/talas/${slug}.json`}
             >
-              {slug}.json
+              Improve this tala on GitHub
             </a>
           </dd>
         </dl>

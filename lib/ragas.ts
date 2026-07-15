@@ -75,6 +75,12 @@ export function slugify(name: string): string {
   return name.toLowerCase().replace(/\s+/g, "-");
 }
 
+// Tolerant slug for matching external spellings: also strips diacritics,
+// so "Āsāvarī" and "Asavari" produce the same key.
+export function slugifyLoose(name: string): string {
+  return slugify(name.normalize("NFD").replace(/[\u0300-\u036f]/g, ""));
+}
+
 async function fetchWithRetry(
   url: string,
   init?: RequestInit,
@@ -179,4 +185,35 @@ export async function getRecordings(): Promise<Entry<Recording>[]> {
 // All names (canonical + aliases, lowercased) by which a document is known.
 export function namesOf(doc: { name: string; aliases?: string[] }): string[] {
   return [doc.name, ...(doc.aliases ?? [])].map((name) => name.toLowerCase());
+}
+
+// Alias slug → canonical slug, for every name a raga is known by. Alias
+// entries are written first so a canonical slug always wins a collision
+// (the dataset's own tests guarantee names and aliases are unique).
+async function ragaSlugAliases(): Promise<Map<string, string>> {
+  const map = new Map<string, string>();
+  const ragas = await getRagas();
+  for (const { slug, doc } of ragas) {
+    for (const alias of doc.aliases ?? []) {
+      map.set(slugifyLoose(alias), slug);
+    }
+  }
+  for (const { slug, doc } of ragas) {
+    map.set(slugifyLoose(doc.name), slug);
+    map.set(slug, slug);
+  }
+  return map;
+}
+
+// Every slug the raga pages should answer on: canonical + alias spellings.
+export async function ragaSlugVariants(): Promise<string[]> {
+  return [...(await ragaSlugAliases()).keys()];
+}
+
+// Resolve any known spelling (canonical slug, alias, diacritic variant)
+// to the canonical slug; undefined if the name is unknown.
+export async function resolveRagaSlug(
+  slug: string
+): Promise<string | undefined> {
+  return (await ragaSlugAliases()).get(slugifyLoose(decodeURIComponent(slug)));
 }

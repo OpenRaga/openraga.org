@@ -187,18 +187,19 @@ export function namesOf(doc: { name: string; aliases?: string[] }): string[] {
   return [doc.name, ...(doc.aliases ?? [])].map((name) => name.toLowerCase());
 }
 
-// Alias slug → canonical slug, for every name a raga is known by. Alias
+// Alias slug → canonical slug, for every name a document is known by. Alias
 // entries are written first so a canonical slug always wins a collision
 // (the dataset's own tests guarantee names and aliases are unique).
-async function ragaSlugAliases(): Promise<Map<string, string>> {
+function slugAliasMap(
+  entries: Entry<{ name: string; aliases?: string[] }>[]
+): Map<string, string> {
   const map = new Map<string, string>();
-  const ragas = await getRagas();
-  for (const { slug, doc } of ragas) {
+  for (const { slug, doc } of entries) {
     for (const alias of doc.aliases ?? []) {
       map.set(slugifyLoose(alias), slug);
     }
   }
-  for (const { slug, doc } of ragas) {
+  for (const { slug, doc } of entries) {
     map.set(slugifyLoose(doc.name), slug);
     map.set(slug, slug);
   }
@@ -207,7 +208,7 @@ async function ragaSlugAliases(): Promise<Map<string, string>> {
 
 // Every slug the raga pages should answer on: canonical + alias spellings.
 export async function ragaSlugVariants(): Promise<string[]> {
-  return [...(await ragaSlugAliases()).keys()];
+  return [...slugAliasMap(await getRagas()).keys()];
 }
 
 // Resolve any known spelling (canonical slug, alias, diacritic variant)
@@ -215,5 +216,19 @@ export async function ragaSlugVariants(): Promise<string[]> {
 export async function resolveRagaSlug(
   slug: string
 ): Promise<string | undefined> {
-  return (await ragaSlugAliases()).get(slugifyLoose(decodeURIComponent(slug)));
+  return slugAliasMap(await getRagas()).get(
+    slugifyLoose(decodeURIComponent(slug))
+  );
+}
+
+export async function talaSlugVariants(): Promise<string[]> {
+  return [...slugAliasMap(await getTalas()).keys()];
+}
+
+export async function resolveTalaSlug(
+  slug: string
+): Promise<string | undefined> {
+  return slugAliasMap(await getTalas()).get(
+    slugifyLoose(decodeURIComponent(slug))
+  );
 }

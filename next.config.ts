@@ -2,9 +2,11 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   async rewrites() {
-    // Machine-readable entry point: /raga/<slug>.json serves the raw
-    // ragamala-data document next to the human-readable page.
-    return [{ source: "/raga/:slug.json", destination: "/api/raga/:slug" }];
+    // Machine-readable entry points: /raga/<slug>.json and /tala/<slug>.json
+    // serve the raw ragamala-data document next to the human-readable page.
+    return [
+      { source: "/:kind(raga|tala)/:slug.json", destination: "/api/:kind/:slug" }
+    ];
   },
   async headers() {
     return [
@@ -12,7 +14,7 @@ const nextConfig: NextConfig = {
         // The JSON documents are open data — allow browser clients on any
         // origin to fetch them directly, and carry license + attribution
         // so consumers see the terms without a docs round-trip.
-        source: "/raga/:slug.json",
+        source: "/:kind(raga|tala)/:slug.json",
         headers: [
           { key: "Access-Control-Allow-Origin", value: "*" },
           {

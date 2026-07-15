@@ -201,12 +201,12 @@ export default async function RagaPage({
               <dd>{raga.classification.join(", ")}</dd>
             </>
           )}
-          <dt>Source</dt>
+          <dt>Contribute</dt>
           <dd>
             <a
               href={`https://github.com/OpenRaga/ragamala-data/blob/main/data/ragas/${slug}.json`}
             >
-              {slug}.json
+              Improve this raga on GitHub
             </a>
           </dd>
         </dl>

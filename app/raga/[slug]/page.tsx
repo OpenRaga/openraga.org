@@ -30,9 +30,20 @@ export async function generateMetadata({
   const { slug } = await params;
   const entry = await getRaga(slug);
   if (!entry) return {};
+  const canonical = `https://openraga.org/raga/${slug}`;
+  const title = `Raga ${entry.doc.name}`;
+  const description = entry.doc.description?.split(". ")[0];
   return {
-    title: `Raga ${entry.doc.name}`,
-    description: entry.doc.description?.split(". ")[0]
+    title,
+    description,
+    alternates: { canonical },
+    openGraph: {
+      title,
+      description,
+      url: canonical,
+      siteName: "OpenRaga",
+      type: "article"
+    }
   };
 }
 
@@ -115,7 +126,7 @@ export default async function RagaPage({
                   return (
                     <li key={name}>
                       {knownSlugs.has(target) ? (
-                        <Link className="chip-link" href={`/ragas/${target}`}>
+                        <Link className="chip-link" href={`/raga/${target}`}>
                           {name}
                         </Link>
                       ) : (

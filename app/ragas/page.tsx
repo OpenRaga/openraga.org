@@ -21,7 +21,7 @@ export default async function RagasPage() {
       <ul className="cards">
         {ragas.map(({ slug, doc: raga }) => (
           <li className="card" key={slug}>
-            <Link href={`/ragas/${slug}`}>
+            <Link href={`/raga/${slug}`}>
               <div className="card-name-row">
                 <span className="card-name">{raga.name}</span>
                 {raga.name_devanagari && (

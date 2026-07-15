@@ -35,16 +35,11 @@ export default function RootLayout({
         <footer className="site-footer">
           <div className="wrap footer-row">
             <p>
-              Raga data: ©{" "}
-              <a href="https://github.com/OpenRaga/ragamala-data">
-                OpenRaga Ragamala Data contributors
-              </a>
-              , CC BY 4.0
+              Built with <a href="https://github.com/OpenRaga/ragajson">RagaJSON</a>.{" "}
+              Data curated by the <a href="https://github.com/OpenRaga/ragamala-data">community</a> under CC BY 4.0.
             </p>
             <p>
-              Format:{" "}
-              <a href="https://github.com/OpenRaga/ragajson">RagaJSON</a> ·
-              Site: <a href="https://github.com/OpenRaga/openraga.org">MIT</a>
+              <a href="https://github.com/OpenRaga/openraga.org">View source code</a>
             </p>
           </div>
         </footer>

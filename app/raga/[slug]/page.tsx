@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import {
   getRaga,
   getRagas,
   getRecordings,
   getTalas,
   namesOf,
+  ragaSlugVariants,
+  resolveRagaSlug,
   slugify
 } from "@/lib/ragas";
 import { displayNote } from "@/lib/notation";
@@ -17,9 +19,10 @@ import {
   talaSlugSet
 } from "../../components/Recordings";
 
+// Prerender alias spellings too, so /raga/kalyan statically redirects
+// to /raga/yaman.
 export async function generateStaticParams() {
-  const ragas = await getRagas();
-  return ragas.map(({ slug }) => ({ slug }));
+  return (await ragaSlugVariants()).map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({
@@ -63,7 +66,12 @@ export default async function RagaPage({
 }) {
   const { slug } = await params;
   const entry = await getRaga(slug);
-  if (!entry) notFound();
+  if (!entry) {
+    // Alias or transliteration variant → 301 to the canonical slug.
+    const canonical = await resolveRagaSlug(slug);
+    if (canonical) permanentRedirect(`/raga/${canonical}`);
+    notFound();
+  }
   const raga = entry.doc;
   const allRagas = await getRagas();
   const knownSlugs = new Set(allRagas.map((r) => r.slug));

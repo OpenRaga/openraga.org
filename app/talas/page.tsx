@@ -21,7 +21,7 @@ export default async function TalasPage() {
           const matras = doc.vibhags.reduce((sum, count) => sum + count, 0);
           return (
             <li className="card" key={slug}>
-              <Link href={`/talas/${slug}`}>
+              <Link href={`/tala/${slug}`}>
                 <div className="card-name-row">
                   <span className="card-name">{doc.name}</span>
                   {doc.name_devanagari && (

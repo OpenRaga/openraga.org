@@ -1,6 +1,13 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
-import { getRecordings, getTala, getTalas, namesOf } from "@/lib/ragas";
+import { notFound, permanentRedirect } from "next/navigation";
+import {
+  getRecordings,
+  getTala,
+  getTalas,
+  namesOf,
+  resolveTalaSlug,
+  talaSlugVariants
+} from "@/lib/ragas";
 import { displayBol, groupTheka, vibhagMarkers } from "@/lib/display";
 import {
   matchingSegments,
@@ -8,9 +15,10 @@ import {
   talaSlugSet
 } from "../../components/Recordings";
 
+// Prerender alias spellings too, so /tala/teental statically redirects
+// to /tala/tintal.
 export async function generateStaticParams() {
-  const talas = await getTalas();
-  return talas.map(({ slug }) => ({ slug }));
+  return (await talaSlugVariants()).map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({
@@ -21,9 +29,20 @@ export async function generateMetadata({
   const { slug } = await params;
   const entry = await getTala(slug);
   if (!entry) return {};
+  const canonical = `https://openraga.org/tala/${slug}`;
+  const title = `Tala ${entry.doc.name}`;
+  const description = entry.doc.description?.split(". ")[0];
   return {
-    title: `Tala ${entry.doc.name}`,
-    description: entry.doc.description?.split(". ")[0]
+    title,
+    description,
+    alternates: { canonical },
+    openGraph: {
+      title,
+      description,
+      url: canonical,
+      siteName: "OpenRaga",
+      type: "article"
+    }
   };
 }
 
@@ -34,7 +53,12 @@ export default async function TalaPage({
 }) {
   const { slug } = await params;
   const entry = await getTala(slug);
-  if (!entry) notFound();
+  if (!entry) {
+    // Alias or transliteration variant → 301 to the canonical slug.
+    const canonical = await resolveTalaSlug(slug);
+    if (canonical) permanentRedirect(`/tala/${canonical}`);
+    notFound();
+  }
   const tala = entry.doc;
   const matras = tala.vibhags.reduce((sum, count) => sum + count, 0);
   const markers = vibhagMarkers(tala.clap_pattern);

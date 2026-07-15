@@ -37,7 +37,7 @@ export function RecordingCard({
         {segment.talas?.map((tala) => {
           const slug = slugify(tala);
           return talaSlugs.has(slug) ? (
-            <Link className="chip chip-link" href={`/talas/${slug}`} key={tala}>
+            <Link className="chip chip-link" href={`/tala/${slug}`} key={tala}>
               {tala}
             </Link>
           ) : (

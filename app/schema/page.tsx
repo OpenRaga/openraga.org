@@ -112,10 +112,10 @@ export default function SchemaPage() {
         <p className="eyebrow">Roadmap</p>
         <h2>The schemas evolve</h2>
         <p>
-          The schemas are alpha: fields and dictionaries grow as the dataset
-          does, guided by two principles — new fields need attestation
+          The schemas are alpha: fields and dictionaries grow as the examples
+          do, guided by two principles — new fields need attestation
           in multiple independent sources, and anything derivable is not
-          stored. Missing a form, an instrument, a bol? Propose it.
+          stored. Missing a thaat, a note token, a bol? Propose it.
         </p>
         <p className="home-link">
           <a href="https://github.com/OpenRaga/ragajson/issues">

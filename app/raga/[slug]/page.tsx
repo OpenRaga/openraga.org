@@ -4,20 +4,12 @@ import { notFound, permanentRedirect } from "next/navigation";
 import {
   getRaga,
   getRagas,
-  getRecordings,
-  getTalas,
-  namesOf,
   ragaSlugVariants,
   resolveRagaSlug,
   slugify
 } from "@/lib/ragas";
 import { displayNote } from "@/lib/notation";
 import { NotationRow, Phrase } from "../../components/Notation";
-import {
-  matchingSegments,
-  RecordingCard,
-  talaSlugSet
-} from "../../components/Recordings";
 
 // Prerender alias spellings too, so /raga/kalyan statically redirects
 // to /raga/yaman.
@@ -75,12 +67,6 @@ export default async function RagaPage({
   const raga = entry.doc;
   const allRagas = await getRagas();
   const knownSlugs = new Set(allRagas.map((r) => r.slug));
-
-  const names = new Set(namesOf(raga));
-  const performances = matchingSegments(await getRecordings(), (segment) =>
-    segment.raga ? names.has(segment.raga.toLowerCase()) : false
-  );
-  const talaSlugs = talaSlugSet(await getTalas());
 
   return (
     <div className="wrap">
@@ -143,21 +129,6 @@ export default async function RagaPage({
                     </li>
                   );
                 })}
-              </ul>
-            </section>
-          )}
-          {performances.length > 0 && (
-            <section>
-              <h2>Recordings</h2>
-              <ul className="recordings">
-                {performances.map(({ recording, segment }, i) => (
-                  <RecordingCard
-                    key={i}
-                    recording={recording}
-                    segment={segment}
-                    talaSlugs={talaSlugs}
-                  />
-                ))}
               </ul>
             </section>
           )}

@@ -24,9 +24,9 @@ export default function RootLayout({
               OpenRaga
             </Link>
             <nav className="site-nav" aria-label="Site">
+              <Link href="/schema">Schemas</Link>
               <Link href="/ragas">Ragas</Link>
               <Link href="/talas">Talas</Link>
-              <Link href="/schema">Schemas</Link>
               <a href="https://github.com/OpenRaga">GitHub</a>
             </nav>
           </div>

@@ -1,83 +1,121 @@
 import Link from "next/link";
-import { getDataset } from "@/lib/ragas";
+import { getDataset, getRaga } from "@/lib/ragas";
+
+// JSON.stringify(…, null, 2) puts every array element on its own line, which
+// makes even a small document look huge. Collapse flat arrays of primitives
+// (no nested brackets) back onto one line for a compact, readable sample.
+function compactJson(value: unknown): string {
+  return JSON.stringify(value, null, 2).replace(
+    /\[\n\s+([^[\]{}]+?)\n\s+\]/g,
+    (_, inner: string) => `[${inner.replace(/,\n\s+/g, ", ")}]`
+  );
+}
 
 export default async function Home() {
   const { ragas, talas } = await getDataset();
+
+  // A real example document, trimmed to its structural core, so the format
+  // itself is the first concrete thing a visitor sees.
+  const sampleEntry = (await getRaga("bhairav")) ?? ragas[0];
+  const s = sampleEntry.doc;
+  const sample = {
+    name: s.name,
+    name_devanagari: s.name_devanagari,
+    system: s.system,
+    thaat: s.thaat,
+    structure: s.structure && {
+      aroha: s.structure.aroha,
+      avaroha: s.structure.avaroha,
+      vadi: s.structure.vadi,
+      samvadi: s.structure.samvadi
+    },
+    performance: s.performance
+  };
+
   return (
     <div className="wrap">
-      <section className="intro">
-        <h1>OpenRaga</h1>
-        <p className="lead">An open format for Hindustani music as data.</p>
-        <p className="tagline">
-          RagaJSON describes ragas and talas in a shared, machine-readable
-          form. The pages here are worked examples of that format.
+      <section className="hero">
+        <h1 className="hero-title">
+          An open schema for Hindustani music as data
+        </h1>
+        <div className="hero-rule" />
+        <p className="hero-support">
+          RagaJSON is a family of JSON Schemas (draft 2020-12) — a precise,
+          machine-readable, validatable way to describe ragas and talas, and a
+          common language anyone can build on.
         </p>
       </section>
 
       <section className="home-block">
-        <p className="eyebrow">The idea</p>
-        <h2>A raga is knowledge worth keeping</h2>
-        <p>
-          For centuries ragas lived in memory and in the hands of teachers,
-          passed from guru to student. A hundred years ago pioneers like
-          Bhatkhande wrote them down — and notation let ragas be taught,
-          compared and studied far beyond a single lineage.
-        </p>
-        <p>
-          OpenRaga is the next step in that tradition. It writes the structure
-          of a raga — its notes, its movement, its identity — in a clear,
-          shared form that both people and computers can read. A common
-          language for ragas, the way sargam is a common language for pitch.
-        </p>
-        <p>
-          Written down this way, the knowledge is no longer locked inside one
-          book, one recording or one memory. It can be searched, compared,
-          connected and kept — freely, and for good. That is the foundation
-          everything else here is built on.
-        </p>
+        <p className="eyebrow">The format</p>
+        <h2>
+          RagaJSON <span className="wip">Alpha</span>
+        </h2>
+        <div className="format-showcase">
+          <div className="format-copy">
+            <p>
+              Each raga or tala is a single JSON document with a defined shape —
+              scale movement, prominent notes, identity — written once, read by
+              people and machines alike, and checkable against the schema.
+            </p>
+            <ul className="schema-list">
+              <li>
+                <a href="/schema/raga/0.2/raga.schema.json">raga schema</a>
+                <span className="version">v0.2</span>
+              </li>
+              <li>
+                <a href="/schema/tala/0.1/tala.schema.json">tala schema</a>
+                <span className="version">v0.1</span>
+              </li>
+            </ul>
+            <p className="home-link">
+              <Link href="/schema">
+                Explore the schemas and their dictionaries →
+              </Link>
+            </p>
+          </div>
+          <figure className="format-sample">
+            <figcaption className="sample-label">
+              {sampleEntry.slug}.json
+            </figcaption>
+            <pre className="code-sample">
+              <code>{compactJson(sample)}</code>
+            </pre>
+          </figure>
+        </div>
       </section>
 
       <section className="home-block">
-        <p className="eyebrow">Why it matters</p>
-        <h2>A foundation to build on — and to last</h2>
+        <p className="eyebrow">Why a schema</p>
+        <h2>Precise, and deliberately small</h2>
         <div className="benefits">
           <div className="benefit-group">
-            <h3>To preserve</h3>
+            <h3>Machine-readable</h3>
             <ul>
               <li>
-                <strong>Nothing locked away.</strong> The knowledge lives in
-                the open under a free license — not in an out-of-print book, a
-                private archive or one teacher&rsquo;s memory.
+                <strong>Validatable.</strong> Every document checks against a
+                JSON Schema (draft 2020-12) — an invalid note token, thaat or bol
+                is simply rejected.
               </li>
               <li>
-                <strong>Captured with precision.</strong> The format can record
-                a raga&rsquo;s structure — its notes, movement and identity —
-                without diluting the detail that makes it what it is.
-              </li>
-              <li>
-                <strong>Made to endure.</strong> Copied freely and corrected in
-                the open, the record can outlast any single person, institution
-                or company.
+                <strong>Symbolic level.</strong> Notes, movement and identity are
+                captured as tokens; ornaments and intonation stay in prose,
+                outside the structured data.
               </li>
             </ul>
           </div>
           <div className="benefit-group">
-            <h3>To build on</h3>
+            <h3>Kept lean</h3>
             <ul>
               <li>
-                <strong>Tools can be built on it.</strong> Learning apps, riyaz
-                aids, players that actually know the raga — a shared form is
-                something anyone can create with.
+                <strong>Nothing derivable is stored.</strong> Jati, varjit
+                svaras and pitch-class sets are computed, never duplicated in the
+                document.
               </li>
               <li>
-                <strong>Searchable and comparable.</strong> Once ragas are data,
-                they can be found by mood, time or notes, and related to one
-                another instead of sitting in isolated prose.
-              </li>
-              <li>
-                <strong>Grows with its community.</strong> Musicians and
-                scholars add and refine, every change reviewed — the format
-                gets richer as more knowledge joins it.
+                <strong>Evidence-driven.</strong> New fields need attestation
+                across independent sources; the schema grows slowly and on
+                purpose.
               </li>
             </ul>
           </div>
@@ -86,30 +124,11 @@ export default async function Home() {
 
       <div className="home-cards">
         <section className="home-card">
-          <p className="eyebrow">Foundation</p>
-          <h2>
-            The format <span className="wip">Alpha</span>
-          </h2>
-          <p>
-            Everything is built on RagaJSON — a family of JSON Schemas that
-            describe ragas and talas in machine-readable form. It is the shared
-            language the rest of the project stands on.
-          </p>
-          <p className="home-link">
-            <Link href="/schema">Explore the schemas</Link>
-          </p>
-        </section>
-
-        <section className="home-card">
           <p className="eyebrow">Examples</p>
-          <h2>
-            The catalog <span className="wip">Alpha</span>
-          </h2>
+          <h2>See the schema in use</h2>
           <p>
-            A small set of documents that conform to the schemas, so you can see
-            the format in use. They are illustrative examples — not an
-            authoritative reference — with conservative, textbook-level readings
-            that will change as the format does.
+            A small, illustrative set of documents that conform to the schemas —
+            worked examples, not an authoritative reference.
           </p>
           <ul className="catalog-links">
             <li>
@@ -119,20 +138,14 @@ export default async function Home() {
               <Link href="/talas">{talas.length} talas</Link>
             </li>
           </ul>
-          <p className="home-link">
-            <a href="https://github.com/OpenRaga/ragajson/tree/main/examples">
-              Browse the examples on GitHub
-            </a>
-          </p>
         </section>
 
         <section className="home-card">
           <p className="eyebrow">Contribute</p>
           <h2>Shape the format</h2>
           <p>
-            Improve the schemas or add an example raga or tala through a pull
-            request. The repository README covers the data policy, licensing
-            and validation.
+            Improve the schemas or add an example through a pull request. The
+            repository README covers the data policy, licensing and validation.
           </p>
           <p className="home-link">
             <a href="https://github.com/OpenRaga/ragajson#contributing--development">

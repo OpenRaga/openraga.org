@@ -89,35 +89,36 @@ a:hover {
 
 /* Landing */
 
-.intro {
-  padding: 4rem 0 1.5rem;
+.hero {
+  text-align: center;
+  padding: 5.5rem 0 4rem;
 }
 
-.intro h1 {
+.hero-title {
   font-family: var(--font-heading);
   font-weight: 700;
-  font-size: clamp(3rem, 8.5vw, 5.2rem);
-  line-height: 0.98;
-  letter-spacing: -0.03em;
-}
-
-.intro .lead {
-  font-family: var(--font-heading);
-  font-weight: 400;
-  font-size: clamp(1.4rem, 3.4vw, 2.1rem);
-  line-height: 1.2;
-  margin-top: 0.7rem;
-  max-width: 40ch;
+  font-size: clamp(1.7rem, 4vw, 2.9rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 auto;
   text-wrap: balance;
 }
 
-.intro .tagline {
+.hero-rule {
+  width: 3rem;
+  height: 2px;
+  background: var(--line);
+  margin: 2.2rem auto;
+}
+
+.hero-support {
   font-family: var(--font-label);
-  font-size: 1.02rem;
-  line-height: 1.5;
+  font-size: clamp(1.02rem, 1.6vw, 1.2rem);
+  line-height: 1.6;
   color: var(--muted);
-  margin-top: 1rem;
-  max-width: 48ch;
+  margin: 0 auto;
+  max-width: 54ch;
+  text-wrap: pretty;
 }
 
 .home-block {
@@ -289,6 +290,67 @@ a:hover {
 .catalog-links span {
   color: var(--muted);
   font-size: 1.05rem;
+}
+
+/* Landing — format showcase */
+
+.format-showcase {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  gap: 2.6rem;
+  align-items: start;
+  margin-top: 0.4rem;
+}
+
+.schema-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  margin: 1.2rem 0;
+  font-family: var(--font-label);
+  font-size: 1rem;
+}
+
+.schema-list li {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.schema-list .version {
+  font-family: var(--font-label);
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-left: 0;
+}
+
+.format-sample {
+  margin: 0;
+}
+
+.sample-label {
+  font-family: var(--font-label);
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
+  color: var(--muted);
+  margin-bottom: 0.4rem;
+}
+
+.code-sample {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas,
+    "Liberation Mono", monospace;
+  font-size: 0.8rem;
+  line-height: 1.55;
+  background: #fbf7ee;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 1rem 1.1rem;
+  overflow-x: auto;
+}
+
+.code-sample code {
+  white-space: pre;
 }
 
 /* Schema hub */
@@ -556,46 +618,6 @@ a:hover {
   font-size: 1.2rem;
 }
 
-/* Recordings */
-
-.recordings {
-  list-style: none;
-  display: grid;
-  gap: 1rem;
-}
-
-.recording {
-  border: 1px solid var(--line);
-  border-radius: 4px;
-  background: #fffefb;
-  padding: 0.9rem 1.1rem 1rem;
-}
-
-.recording-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 1rem;
-  font-family: var(--font-heading);
-  font-weight: 600;
-  font-size: 1.05rem;
-  margin-bottom: 0.5rem;
-}
-
-.recording-year {
-  font-family: var(--font-label);
-  font-weight: 400;
-  font-size: 0.85rem;
-  color: var(--muted);
-}
-
-.recording-notes {
-  font-size: 0.95rem;
-  color: var(--muted);
-  margin-top: 0.6rem;
-  max-width: 58ch;
-}
-
 a.chip-link:hover {
   text-decoration: none;
   border-color: var(--indigo);
@@ -621,6 +643,11 @@ a.chip-link:hover {
 }
 
 @media (max-width: 48rem) {
+  .format-showcase {
+    grid-template-columns: 1fr;
+    gap: 1.6rem;
+  }
+
   .raga-body {
     grid-template-columns: 1fr;
     gap: 2rem;

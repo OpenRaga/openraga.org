@@ -9,7 +9,7 @@ export const metadata: Metadata = {
     template: "%s · OpenRaga"
   },
   description:
-    "An open, machine-readable format for Hindustani music: ragas, talas and recordings as data, with worked examples. Freely licensed."
+    "An open, machine-readable format for Hindustani music: ragas and talas as data, with worked examples. Freely licensed."
 };
 
 export default function RootLayout({

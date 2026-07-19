@@ -2,16 +2,15 @@ import Link from "next/link";
 import { getDataset } from "@/lib/ragas";
 
 export default async function Home() {
-  const { ragas, talas, recordings } = await getDataset();
+  const { ragas, talas } = await getDataset();
   return (
     <div className="wrap">
       <section className="intro">
         <h1>OpenRaga</h1>
         <p className="lead">An open format for Hindustani music as data.</p>
         <p className="tagline">
-          RagaJSON describes ragas, talas and recordings in a shared,
-          machine-readable form. The pages here are worked examples of that
-          format.
+          RagaJSON describes ragas and talas in a shared, machine-readable
+          form. The pages here are worked examples of that format.
         </p>
       </section>
 
@@ -93,8 +92,8 @@ export default async function Home() {
           </h2>
           <p>
             Everything is built on RagaJSON — a family of JSON Schemas that
-            describe ragas, talas and exemplary recordings in machine-readable
-            form. It is the shared language the rest of the project stands on.
+            describe ragas and talas in machine-readable form. It is the shared
+            language the rest of the project stands on.
           </p>
           <p className="home-link">
             <Link href="/schema">Explore the schemas</Link>
@@ -119,9 +118,6 @@ export default async function Home() {
             <li>
               <Link href="/talas">{talas.length} talas</Link>
             </li>
-            <li>
-              <span>{recordings.length} recordings</span>
-            </li>
           </ul>
           <p className="home-link">
             <a href="https://github.com/OpenRaga/ragajson/tree/main/examples">
@@ -134,9 +130,9 @@ export default async function Home() {
           <p className="eyebrow">Contribute</p>
           <h2>Shape the format</h2>
           <p>
-            Improve the schemas or add an example raga, tala or recording
-            through a pull request. The repository README covers the data
-            policy, licensing and validation.
+            Improve the schemas or add an example raga or tala through a pull
+            request. The repository README covers the data policy, licensing
+            and validation.
           </p>
           <p className="home-link">
             <a href="https://github.com/OpenRaga/ragajson#contributing--development">

@@ -1,19 +1,11 @@
 import type { Metadata } from "next";
 import { notFound, permanentRedirect } from "next/navigation";
 import {
-  getRecordings,
   getTala,
-  getTalas,
-  namesOf,
   resolveTalaSlug,
   talaSlugVariants
 } from "@/lib/ragas";
 import { displayBol, groupTheka, vibhagMarkers } from "@/lib/display";
-import {
-  matchingSegments,
-  RecordingCard,
-  talaSlugSet
-} from "../../components/Recordings";
 
 // Prerender alias spellings too, so /tala/teental statically redirects
 // to /tala/tintal.
@@ -64,13 +56,6 @@ export default async function TalaPage({
   const markers = vibhagMarkers(tala.clap_pattern);
   const groups = groupTheka(tala.theka, tala.vibhags);
 
-  const recordings = await getRecordings();
-  const names = new Set(namesOf(tala));
-  const heard = matchingSegments(recordings, (segment) =>
-    (segment.talas ?? []).some((name) => names.has(name.toLowerCase()))
-  );
-  const talaSlugs = talaSlugSet(await getTalas());
-
   return (
     <div className="wrap">
       <header className="raga-header">
@@ -103,21 +88,6 @@ export default async function TalaPage({
             <section>
               <h2>Character</h2>
               <p className="prose">{tala.description}</p>
-            </section>
-          )}
-          {heard.length > 0 && (
-            <section>
-              <h2>Heard in</h2>
-              <ul className="recordings">
-                {heard.map(({ recording, segment }, i) => (
-                  <RecordingCard
-                    key={i}
-                    recording={recording}
-                    segment={segment}
-                    talaSlugs={talaSlugs}
-                  />
-                ))}
-              </ul>
             </section>
           )}
         </div>

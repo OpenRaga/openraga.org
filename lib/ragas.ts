@@ -36,23 +36,6 @@ export interface Tala {
   description?: string;
 }
 
-export interface RecordingSegment {
-  raga?: string;
-  talas?: string[];
-  form?: string;
-  instrument?: string;
-  start?: number;
-  notes?: string;
-}
-
-export interface Recording {
-  source: string;
-  artist: string;
-  year?: number;
-  notes?: string;
-  segments: RecordingSegment[];
-}
-
 export interface Entry<T> {
   slug: string;
   doc: T;
@@ -61,7 +44,6 @@ export interface Entry<T> {
 export interface Dataset {
   ragas: Entry<Raga>[];
   talas: Entry<Tala>[];
-  recordings: Entry<Recording>[];
 }
 
 // The example documents are fetched as a single tarball snapshot of the
@@ -131,12 +113,10 @@ async function loadDataset(): Promise<Dataset> {
   const res = await fetchWithRetry(DATA_TARBALL);
   const { gunzipSync } = await import("node:zlib");
   const tar = gunzipSync(Buffer.from(await res.arrayBuffer()));
-  const dataset: Dataset = { ragas: [], talas: [], recordings: [] };
+  const dataset: Dataset = { ragas: [], talas: [] };
   for (const { name, body } of tarEntries(tar)) {
     // Example documents live under examples/<collection>/<slug>.json.
-    const match = name.match(
-      /\/examples\/(ragas|talas|recordings)\/([^/]+)\.json$/
-    );
+    const match = name.match(/\/examples\/(ragas|talas)\/([^/]+)\.json$/);
     if (!match) continue;
     const collection = match[1] as keyof Dataset;
     dataset[collection].push({
@@ -175,15 +155,6 @@ export async function getTalas(): Promise<Entry<Tala>[]> {
 
 export async function getTala(slug: string): Promise<Entry<Tala> | undefined> {
   return (await getTalas()).find((entry) => entry.slug === slug);
-}
-
-export async function getRecordings(): Promise<Entry<Recording>[]> {
-  return (await getDataset()).recordings;
-}
-
-// All names (canonical + aliases, lowercased) by which a document is known.
-export function namesOf(doc: { name: string; aliases?: string[] }): string[] {
-  return [doc.name, ...(doc.aliases ?? [])].map((name) => name.toLowerCase());
 }
 
 // Alias slug → canonical slug, for every name a document is known by. Alias

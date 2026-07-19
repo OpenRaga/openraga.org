@@ -5,8 +5,9 @@ Source of [openraga.org](https://openraga.org) — the catalog and showcase of t
 
 ## How it works
 
-- Next.js (App Router). Raga pages are statically generated at build time from
-  [ragamala-data](https://github.com/OpenRaga/ragamala-data) — git is the database.
+- Next.js (App Router). Raga and tala pages are statically generated at build time
+  from the example documents in [ragajson](https://github.com/OpenRaga/ragajson)
+  (`examples/`) — fetched as a codeload tarball of main.
 - Sargam notation is rendered from RagaJSON note tokens following the schema's
   displayName convention (prime sign ′ for octaves, lowercase = komal, Má = tivra).
 - Versioned snapshots of the [RagaJSON](https://github.com/OpenRaga/ragajson) schema
@@ -17,10 +18,10 @@ Source of [openraga.org](https://openraga.org) — the catalog and showcase of t
 ```sh
 npm install
 npm run dev    # http://localhost:3000
-npm run build  # production build (fetches ragamala-data from GitHub)
+npm run build  # production build (fetches ragajson examples from GitHub)
 ```
 
 ## License
 
-Code is licensed under [MIT](LICENSE). Raga data shown on the site:
-© OpenRaga Ragamala Data contributors, CC BY 4.0.
+Code is licensed under [MIT](LICENSE). Example data shown on the site:
+© OpenRaga contributors, CC BY 4.0.

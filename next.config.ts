@@ -3,7 +3,7 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   async rewrites() {
     // Machine-readable entry points: /raga/<slug>.json and /tala/<slug>.json
-    // serve the raw ragamala-data document next to the human-readable page.
+    // serve the raw RagaJSON example document next to the human-readable page.
     return [
       { source: "/:kind(raga|tala)/:slug.json", destination: "/api/:kind/:slug" }
     ];
@@ -23,8 +23,7 @@ const nextConfig: NextConfig = {
           },
           {
             key: "X-Attribution",
-            value:
-              "(c) OpenRaga Ragamala Data contributors, CC BY 4.0, openraga.org"
+            value: "(c) OpenRaga contributors, CC BY 4.0, openraga.org"
           }
         ]
       }

@@ -64,12 +64,12 @@ export interface Dataset {
   recordings: Entry<Recording>[];
 }
 
-// The dataset is fetched as a single tarball snapshot of the main branch.
-// This avoids api.github.com entirely: codeload has no rate limits, needs no
-// auth, and one request fetches every collection — build-friendly on shared
-// CI IPs.
+// The example documents are fetched as a single tarball snapshot of the
+// ragajson main branch. This avoids api.github.com entirely: codeload has no
+// rate limits, needs no auth, and one request fetches every collection —
+// build-friendly on shared CI IPs.
 const DATA_TARBALL =
-  "https://codeload.github.com/OpenRaga/ragamala-data/tar.gz/refs/heads/main";
+  "https://codeload.github.com/OpenRaga/ragajson/tar.gz/refs/heads/main";
 
 export function slugify(name: string): string {
   return name.toLowerCase().replace(/\s+/g, "-");
@@ -133,20 +133,19 @@ async function loadDataset(): Promise<Dataset> {
   const tar = gunzipSync(Buffer.from(await res.arrayBuffer()));
   const dataset: Dataset = { ragas: [], talas: [], recordings: [] };
   for (const { name, body } of tarEntries(tar)) {
-    // Accepts both the legacy flat layout (data/<slug>.json) and the typed
-    // layout (data/<collection>/<slug>.json).
+    // Example documents live under examples/<collection>/<slug>.json.
     const match = name.match(
-      /\/data\/(?:(ragas|talas|recordings)\/)?([^/]+)\.json$/
+      /\/examples\/(ragas|talas|recordings)\/([^/]+)\.json$/
     );
     if (!match) continue;
-    const collection = (match[1] ?? "ragas") as keyof Dataset;
+    const collection = match[1] as keyof Dataset;
     dataset[collection].push({
       slug: match[2],
       doc: JSON.parse(body.toString("utf8"))
     });
   }
   if (dataset.ragas.length === 0) {
-    throw new Error("No raga documents found in the ragamala-data tarball");
+    throw new Error("No raga documents found in the ragajson examples tarball");
   }
   dataset.ragas.sort((a, b) => a.doc.name.localeCompare(b.doc.name));
   dataset.talas.sort((a, b) => a.doc.name.localeCompare(b.doc.name));

@@ -129,7 +129,7 @@ export default async function TalaPage({
           <dt>Contribute</dt>
           <dd>
             <a
-              href={`https://github.com/OpenRaga/ragamala-data/blob/main/data/talas/${slug}.json`}
+              href={`https://github.com/OpenRaga/ragajson/blob/main/examples/talas/${slug}.json`}
             >
               Improve this tala on GitHub
             </a>

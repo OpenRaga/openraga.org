@@ -9,7 +9,7 @@ export const metadata: Metadata = {
     template: "%s · OpenRaga"
   },
   description:
-    "An open format and community-curated database of Hindustani music: ragas, talas and exemplary recordings, machine-readable and freely licensed."
+    "An open, machine-readable format for Hindustani music: ragas, talas and recordings as data, with worked examples. Freely licensed."
 };
 
 export default function RootLayout({
@@ -35,8 +35,8 @@ export default function RootLayout({
         <footer className="site-footer">
           <div className="wrap footer-row">
             <p>
-              Built with <a href="https://github.com/OpenRaga/ragajson">RagaJSON</a>.{" "}
-              Data curated by the <a href="https://github.com/OpenRaga/ragamala-data">community</a> under CC BY 4.0.
+              Built on <a href="https://github.com/OpenRaga/ragajson">RagaJSON</a>.{" "}
+              Example data under CC BY 4.0.
             </p>
             <p>
               <a href="https://github.com/OpenRaga/openraga.org">View source code</a>

@@ -4,7 +4,7 @@ import { getTalas } from "@/lib/ragas";
 
 export const metadata: Metadata = {
   title: "Talas",
-  description: "Catalog of Hindustani talas — rhythm cycles — from the OpenRaga dataset."
+  description: "Example Hindustani tala documents — rhythm cycles — in the RagaJSON format."
 };
 
 export default async function TalasPage() {
@@ -13,8 +13,9 @@ export default async function TalasPage() {
     <div className="wrap">
       <h1 className="page-title">The talas</h1>
       <p className="page-subtitle">
-        {talas.length} rhythm cycles: matra counts, vibhag divisions, clap
-        patterns and canonical thekas — machine-readable and CI-validated.
+        {talas.length} example rhythm cycles: matra counts, vibhag divisions,
+        clap patterns and thekas — illustrative, schema-validated documents in
+        the RagaJSON format.
       </p>
       <ul className="cards">
         {talas.map(({ slug, doc }) => {

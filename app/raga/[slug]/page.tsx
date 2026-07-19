@@ -212,7 +212,7 @@ export default async function RagaPage({
           <dt>Contribute</dt>
           <dd>
             <a
-              href={`https://github.com/OpenRaga/ragamala-data/blob/main/data/ragas/${slug}.json`}
+              href={`https://github.com/OpenRaga/ragajson/blob/main/examples/ragas/${slug}.json`}
             >
               Improve this raga on GitHub
             </a>

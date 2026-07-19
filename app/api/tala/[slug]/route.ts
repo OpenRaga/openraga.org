@@ -1,7 +1,7 @@
 import { getTala, resolveTalaSlug, talaSlugVariants } from "@/lib/ragas";
 
 // Serves /tala/<slug>.json (rewritten here in next.config.ts): the raw
-// ragamala-data document for the tala, prerendered at build time.
+// RagaJSON example document for the tala, prerendered at build time.
 export const dynamic = "force-static";
 
 export async function generateStaticParams() {

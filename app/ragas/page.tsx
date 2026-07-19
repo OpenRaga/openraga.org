@@ -6,7 +6,7 @@ import { Phrase } from "../components/Notation";
 export const metadata: Metadata = {
   title: "Ragas",
   description:
-    "Catalog of Hindustani ragas from the OpenRaga Ragamala Data set."
+    "Example Hindustani raga documents in the RagaJSON format."
 };
 
 export default async function RagasPage() {
@@ -15,8 +15,8 @@ export default async function RagasPage() {
     <div className="wrap">
       <h1 className="page-title">The ragas</h1>
       <p className="page-subtitle">
-        {ragas.length} ragas from the community-curated Ragamala Data set.
-        Every entry is a reviewed, schema-validated document.
+        {ragas.length} example ragas in the RagaJSON format — illustrative,
+        schema-validated documents, not an authoritative reference.
       </p>
       <ul className="cards">
         {ragas.map(({ slug, doc: raga }) => (

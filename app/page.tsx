@@ -7,10 +7,11 @@ export default async function Home() {
     <div className="wrap">
       <section className="intro">
         <h1>OpenRaga</h1>
-        <p className="lead">Hindustani music as open data.</p>
+        <p className="lead">An open format for Hindustani music as data.</p>
         <p className="tagline">
-          An open format for ragas, talas and recordings — and a catalog built
-          on it.
+          RagaJSON describes ragas, talas and recordings in a shared,
+          machine-readable form. The pages here are worked examples of that
+          format.
         </p>
       </section>
 
@@ -50,9 +51,9 @@ export default async function Home() {
                 private archive or one teacher&rsquo;s memory.
               </li>
               <li>
-                <strong>Kept in full.</strong> A raga&rsquo;s structure is
-                recorded precisely and completely, without diluting the detail
-                that makes it what it is.
+                <strong>Captured with precision.</strong> The format can record
+                a raga&rsquo;s structure — its notes, movement and identity —
+                without diluting the detail that makes it what it is.
               </li>
               <li>
                 <strong>Made to endure.</strong> Copied freely and corrected in
@@ -70,9 +71,9 @@ export default async function Home() {
                 something anyone can create with.
               </li>
               <li>
-                <strong>Searchable and comparable.</strong> Find ragas by mood,
-                time or notes; see how they relate; study across gharanas and
-                recordings.
+                <strong>Searchable and comparable.</strong> Once ragas are data,
+                they can be found by mood, time or notes, and related to one
+                another instead of sitting in isolated prose.
               </li>
               <li>
                 <strong>Grows with its community.</strong> Musicians and
@@ -101,18 +102,15 @@ export default async function Home() {
         </section>
 
         <section className="home-card">
-          <p className="eyebrow">Catalog</p>
+          <p className="eyebrow">Examples</p>
           <h2>
-            Ragamala <span className="wip">In progress</span>
+            The catalog <span className="wip">Alpha</span>
           </h2>
           <p>
-            Ragamala Data is an open, community-curated collection built on the
-            format: one document per raga, tala and recording, every change
-            reviewed and validated in CI. Git is the database.
-          </p>
-          <p className="catalog-note">
-            Early and under active curation — the collection is small and
-            growing.
+            A small set of documents that conform to the schemas, so you can see
+            the format in use. They are illustrative examples — not an
+            authoritative reference — with conservative, textbook-level readings
+            that will change as the format does.
           </p>
           <ul className="catalog-links">
             <li>
@@ -126,22 +124,23 @@ export default async function Home() {
             </li>
           </ul>
           <p className="home-link">
-            <a href="https://github.com/OpenRaga/ragamala-data">
-              Browse the data on GitHub
+            <a href="https://github.com/OpenRaga/ragajson/tree/main/examples">
+              Browse the examples on GitHub
             </a>
           </p>
         </section>
 
         <section className="home-card">
           <p className="eyebrow">Contribute</p>
-          <h2>Add to the catalog</h2>
+          <h2>Shape the format</h2>
           <p>
-            Add a raga, a tala or a recording through a pull request. The
-            contribution guide covers sourcing rules, licensing and validation.
+            Improve the schemas or add an example raga, tala or recording
+            through a pull request. The repository README covers the data
+            policy, licensing and validation.
           </p>
           <p className="home-link">
-            <a href="https://github.com/OpenRaga/ragamala-data/blob/main/CONTRIBUTING.md">
-              Read the contribution guide
+            <a href="https://github.com/OpenRaga/ragajson#contributing--development">
+              Contribute on GitHub
             </a>
           </p>
         </section>
